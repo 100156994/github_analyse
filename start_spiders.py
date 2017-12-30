@@ -1,3 +1,4 @@
+#开始爬虫，抓取数据
 # coding=utf8
 # -*- coding: utf-8 -*-
 from scrapy.crawler import CrawlerProcess
