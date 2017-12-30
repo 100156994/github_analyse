@@ -34,15 +34,25 @@ class GithubSpider(scrapy.Spider):
                     "total_fork": 0,
                     "total_watch": 0,
                     "total_sum": 0,
-                    'count': 0
+                    'count': 0,
+                    'reposition': []
                 }
             language_obj = {
                 "total_star": int(obj['stargazers_count']) + int(language_obj['total_star']),
                 "total_fork": int(obj['forks_count']) + int(language_obj['total_fork']),
                 "total_watch": int(obj['watchers_count']) + int(language_obj['total_watch']),
                 "total_sum": int(obj['size']) + int(language_obj['total_sum']),
-                "count": 1 + int(language_obj['count'])
+                "count": 1 + int(language_obj['count']),
+                'reposition': language_obj['reposition']
             }
+            language_obj['reposition'].append({
+                'url': obj['html_url'],
+                'star': int(obj['stargazers_count']),
+                'fork': int(obj['forks_count']),
+                'watch': int(obj['watchers_count']),
+                "language": obj['language'],
+                'name': obj['full_name']
+            })
             json_obj[obj['language']] = language_obj
 
         arr = []
@@ -55,6 +65,7 @@ class GithubSpider(scrapy.Spider):
         for key in json_obj.keys():
             if json_obj[key]['total_star'] in arr:
                 obj[key] = json_obj[key]
+
         self.output_to_json(obj)
 
     def input_from_json(self):
